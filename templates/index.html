@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Pogoda</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+
+<form method="post">
+    <input name="city" placeholder="Miasto">
+    <input name="country" placeholder="PL">
+    <button type="submit">Pobierz pogodę</button>
+</form>
+
+{% if weather %}
+
+<canvas id="chart"></canvas>
+
+<script>
+
+const labels = {{ weather.time|tojson }};
+const temps = {{ weather.temperature_2m|tojson }};
+
+new Chart(document.getElementById("chart"), {
+    type: "line",
+    data: {
+        labels: labels,
+        datasets: [{
+            label: "Temperatura",
+            data: temps
+        }]
+    }
+});
+
+</script>
+
+{% endif %}
+
+</body>
+</html>

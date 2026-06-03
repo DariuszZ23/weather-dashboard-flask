@@ -1,0 +1,54 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Virtual Environment
+venv/
+.venv/
+env/
+
+# Flask
+instance/
+.flaskenv
+
+# IDE
+.vscode/
+.idea/
+
+# System files
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+
+# Pytest
+.pytest_cache/
+
+# Coverage
+.coverage
+htmlcov/
+
+# Build
+build/
+dist/
+*.egg-info/
+
+# Jupyter
+.ipynb_checkpoints/
+
+# Docker
+*.tar
+
+# Environment variables
+.env
+
+# Matplotlib generated files (jeśli zapisujesz wykresy)
+*.png
+*.jpg
+*.jpeg
+
+# Temporary files
+tmp/
+temp/
