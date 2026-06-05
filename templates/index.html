@@ -22,17 +22,23 @@ const labels = {{ weather.time|tojson }};
 const temps = {{ weather.temperature_2m|tojson }};
 
 new Chart(document.getElementById("chart"), {
-    type: "line",
+    type: "bar",
     data: {
         labels: labels,
         datasets: [{
             label: "Temperatura",
             data: temps
         }]
-    }
+    },
+     options: {
+        backgroundColor:'rgba(158, 0, 135, 0.5)'
+     }
 });
 
 </script>
+{% else %}
+    Brak danych.
+<p>Wprowadź angielską nazwę miasta i dwuliterowy kod ISO kraju. </p>
 
 {% endif %}
 
