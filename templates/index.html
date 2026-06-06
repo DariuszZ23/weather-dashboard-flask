@@ -12,6 +12,8 @@
     <button type="submit">Pobierz pogodę</button>
 </form>
 
+<p>Wprowadź angielską nazwę miasta i dwuliterowy kod ISO kraju. </p>
+
 {% if weather %}
 
 <canvas id="chart"></canvas>
@@ -38,7 +40,7 @@ new Chart(document.getElementById("chart"), {
 </script>
 {% else %}
     Brak danych.
-<p>Wprowadź angielską nazwę miasta i dwuliterowy kod ISO kraju. </p>
+
 
 {% endif %}
 

@@ -33,11 +33,14 @@ def index():
                     "latitude": lat,
                     "longitude": lon,
                     "hourly": "temperature_2m",
-                    "forecast_days": 1
+                    "forecast_days": 7
                 }
             ).json()
 
             weather = data["hourly"]
+            print(data["hourly"])
+            print(data["timezone"])
+            print(data["hourly_units"])
 
     return render_template("index.html", weather=weather)
 
