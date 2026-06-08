@@ -3,13 +3,22 @@
 <head>
     <title>Pogoda</title>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+        function toggleButton() {
+            const cityName = document.getElementById("cityInput");
+            console.log(cityName);
+            const countryID = document.getElementById("countryCode");
+            const submitButton = document.getElementById("submitButton");
+            submitButton.disabled = cityName.value.trim() === "" || countryID.value.trim() === "";
+        }
+    </script>
 </head>
 <body>
 
 <form method="post">
-    <input name="city" placeholder="Miasto">
-    <input name="country" placeholder="PL">
-    <button type="submit">Pobierz pogodę</button>
+    <input id="cityInput" name="city" onkeyup= "toggleButton()" placeholder="Miasto">
+    <input id="countryCode" name="country" onkeyup= "toggleButton()" minlength="2" maxlength="2" placeholder="PL">
+    <button id="submitButton" disabled type="submit">Pobierz pogodę</button>
 </form>
 
 <p>Wprowadź angielską nazwę miasta i dwuliterowy kod ISO kraju. </p>
