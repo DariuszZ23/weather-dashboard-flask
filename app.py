@@ -32,8 +32,9 @@ def index():
                 params={
                     "latitude": lat,
                     "longitude": lon,
-                    "hourly": "temperature_2m",
-                    "forecast_days": 7
+                    "hourly": "temperature_2m,wind_speed_10m,relative_humidity_2m",
+                    "forecast_days": 7,
+
                 }
             ).json()
 
@@ -41,6 +42,7 @@ def index():
             print(data["hourly"])
             print(data["timezone"])
             print(data["hourly_units"])
+
 
     return render_template("index.html", weather=weather)
 

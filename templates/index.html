@@ -1,6 +1,13 @@
 <!DOCTYPE html>
 <html>
 <head>
+    <style>
+    canvas {
+        width: 600px !important;
+        height: 300px !important;
+        border: 1px solid black;
+    }
+</style>
     <title>Pogoda</title>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script>
@@ -25,20 +32,50 @@
 
 {% if weather %}
 
-<canvas id="chart"></canvas>
-
+<canvas id="chart_temperature" style="border:1px solid"></canvas>
+<canvas id="chart_wind"></canvas>
+<canvas id="chart_humidity"></canvas>
 <script>
 
 const labels = {{ weather.time|tojson }};
 const temps = {{ weather.temperature_2m|tojson }};
+const wind = {{ weather.wind_speed_10m|tojson }};
+const humidity = {{weather.relative_humidity_2m|tojson }};
 
-new Chart(document.getElementById("chart"), {
+new Chart(document.getElementById("chart_temperature"), {
     type: "bar",
     data: {
         labels: labels,
         datasets: [{
             label: "Temperatura",
             data: temps
+        }]
+    },
+     options: {
+        backgroundColor:'rgba(158, 0, 135, 0.5)'
+     }
+});
+
+new Chart(document.getElementById("chart_wind"), {
+    type: "bar",
+    data: {
+        labels: labels,
+        datasets: [{
+            label: "Wind speed",
+            data: wind
+        }]
+    },
+     options: {
+        backgroundColor:'rgba(158, 0, 135, 0.5)'
+     }
+});
+new Chart(document.getElementById("chart_humidity"), {
+    type: "bar",
+    data: {
+        labels: labels,
+        datasets: [{
+            label: "Humidity",
+            data: humidity
         }]
     },
      options: {
