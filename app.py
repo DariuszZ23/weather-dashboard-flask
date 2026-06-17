@@ -7,11 +7,13 @@ app = Flask(__name__)
 def index():
 
     weather = None
+    city_name = None
 
     if request.method == "POST":
 
         city = request.form["city"]
         country = request.form["country"]
+        city_name = city
 
         geo = requests.get(
             "https://geocoding-api.open-meteo.com/v1/search",
@@ -43,8 +45,11 @@ def index():
             # print(data["timezone"])
             # print(data["hourly_units"])
 
-
-    return render_template("index.html", weather=weather)
+    return render_template(
+        "index.html",
+        weather=weather,
+        city_name=city_name
+    )
 
 @app.route("/xx/", methods=["GET", "POST"])
 def xx():
