@@ -39,9 +39,9 @@ def index():
             ).json()
 
             weather = data["hourly"]
-            print(data["hourly"])
-            print(data["timezone"])
-            print(data["hourly_units"])
+            # print(data["hourly"])
+            # print(data["timezone"])
+            # print(data["hourly_units"])
 
 
     return render_template("index.html", weather=weather)

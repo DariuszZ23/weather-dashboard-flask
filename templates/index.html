@@ -20,7 +20,7 @@
         }
     </script>
 </head>
-<body>
+<body style="background-color:rgba(0, 188, 198, 0.5);">
 
 <form method="post">
     <input id="cityInput" name="city" onkeyup= "toggleButton()" placeholder="City">
@@ -28,7 +28,7 @@
     <button id="submitButton" disabled type="submit">Download weather</button>
 </form>
 
-<p>Input the city name and ISO two letter country code.</p>
+<p>Input the city name and ISO two-letter country code.</p>
 
 {% if weather %}
 
@@ -52,7 +52,7 @@ new Chart(document.getElementById("chart_temperature"), {
         }]
     },
      options: {
-        backgroundColor:'rgba(158, 0, 135, 0.5)'
+        backgroundColor:'rgba(255, 0, 0, 0.6)'
      }
 });
 
@@ -66,7 +66,7 @@ new Chart(document.getElementById("chart_wind"), {
         }]
     },
      options: {
-        backgroundColor:'rgba(158, 0, 135, 0.5)'
+        backgroundColor:'rgba(54, 217, 0, 0.6)'
      }
 });
 new Chart(document.getElementById("chart_humidity"), {
@@ -79,13 +79,13 @@ new Chart(document.getElementById("chart_humidity"), {
         }]
     },
      options: {
-        backgroundColor:'rgba(158, 0, 135, 0.5)'
+        backgroundColor:'rgba(0, 94, 255, 0.6)'
      }
 });
 
 </script>
 {% else %}
-    Brak danych.
+    No data.
 
 
 {% endif %}
