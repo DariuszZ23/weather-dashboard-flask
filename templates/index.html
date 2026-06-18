@@ -29,9 +29,9 @@
 </form>
 <hr>
 
-
 {% if weather %}
-<h2>Weather for {{ city_name.title() }}</h2>
+<h2>Weather for {{ city_name.title() }}, {{ country_code }}</h2>
+<p>State: {{ state }}</p>
 <canvas id="chart_temperature" style="border:1px solid"></canvas>
 <canvas id="chart_wind"></canvas>
 <canvas id="chart_humidity"></canvas>

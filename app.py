@@ -8,6 +8,8 @@ def index():
 
     weather = None
     city_name = None
+    country_code = None
+    state = None
 
     if request.method == "POST":
 
@@ -25,10 +27,13 @@ def index():
         ).json()
 
         if geo.get("results"):
-
+            place = geo["results"][0]
             lat = geo["results"][0]["latitude"]
             lon = geo["results"][0]["longitude"]
-
+            city_name = place.get("name")
+            country_code = place.get("country_code")
+            state = place.get("admin1")
+            print(geo["results"][0]["admin1"])
             data = requests.get(
                 "https://api.open-meteo.com/v1/forecast",
                 params={
@@ -48,7 +53,9 @@ def index():
     return render_template(
         "index.html",
         weather=weather,
-        city_name=city_name
+        city_name=city_name,
+        country_code=country_code,
+        state=state
     )
 
 @app.route("/xx/", methods=["GET", "POST"])
