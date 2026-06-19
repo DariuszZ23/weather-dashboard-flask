@@ -13,8 +13,8 @@ def index():
 
     if request.method == "POST":
 
-        city = request.form["city"]
-        country = request.form["country"]
+        city = request.form.get("city")
+        country = request.form.get("country")
         city_name = city
 
         geo = requests.get(
@@ -55,7 +55,9 @@ def index():
         weather=weather,
         city_name=city_name,
         country_code=country_code,
-        state=state
+        state=state,
+        lat=lat,
+        lon=lon
     )
 
 @app.route("/xx/", methods=["GET", "POST"])

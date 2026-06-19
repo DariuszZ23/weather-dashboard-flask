@@ -7,9 +7,18 @@
         height: 300px !important;
         border: 1px solid black;
     }
+    #map {
+    height: 300px;
+    width: 600px;
+    margin-top: 20px;
+    border: 1px solid black;
+    }
 </style>
     <title>Weather</title>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <!-- Leaflet -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+    <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
     <script>
         function toggleButton() {
             const cityName = document.getElementById("cityInput");
@@ -32,15 +41,20 @@
 {% if weather %}
 <h2>Weather for {{ city_name.title() }}, {{ country_code }}</h2>
 <p>State: {{ state }}</p>
+
 <canvas id="chart_temperature" style="border:1px solid"></canvas>
 <canvas id="chart_wind"></canvas>
 <canvas id="chart_humidity"></canvas>
+<!-- MAPA -->
+<div id="map"></div>
 <script>
 
 const labels = {{ weather.time|tojson }};
 const temps = {{ weather.temperature_2m|tojson }};
 const wind = {{ weather.wind_speed_10m|tojson }};
 const humidity = {{ weather.relative_humidity_2m|tojson }};
+const lat = {{ lat }};
+const lon = {{ lon }};
 
 new Chart(document.getElementById("chart_temperature"), {
     type: "bar",
@@ -82,6 +96,17 @@ new Chart(document.getElementById("chart_humidity"), {
         backgroundColor:'rgba(0, 94, 255, 0.6)'
      }
 });
+var map = L.map('map').setView([lat, lon], 8);
+
+L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    attribution: '&copy; OpenStreetMap'
+}).addTo(map);
+
+L.marker([lat, lon])
+    .addTo(map)
+    .bindPopup("{{ city_name }}")
+    .openPopup();
+
 
 </script>
 {% else %}
