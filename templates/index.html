@@ -1,20 +1,34 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <style>
-    canvas {
-        width: 600px !important;
-        height: 300px !important;
-        border: 1px solid black;
-    }
-    #map {
-    height: 300px;
-    width: 600px;
-    margin-top: 20px;
-    border: 1px solid black;
-    }
-</style>
     <title>Weather</title>
+    <style>
+        .layout {
+            display: flex;
+            gap: 20px;
+            align-items: flex-start;
+        }
+
+        /* lewa kolumna */
+        .left {
+            width: 600px;
+        }
+
+        /* prawa kolumna */
+        .right {
+            width: 600px;
+        }
+        canvas {
+            width: 600px !important;
+            height: 300px !important;
+            border: 1px solid black;
+        }
+        #map {
+            height: 300px;
+            width: 600px;
+            border: 1px solid black;
+        }
+    </style>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <!-- Leaflet -->
     <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
@@ -29,7 +43,7 @@
         }
     </script>
 </head>
-<body style="background-color:rgba(0, 188, 198, 0.5);">
+<body style="background-color:rgba(0, 188, 198, 0.2);">
 <p>Input the city name and ISO two-letter country code.</p>
 <form method="post">
     <input id="cityInput" name="city" onkeyup= "toggleButton()" placeholder="City">
@@ -42,11 +56,17 @@
 <h2>Weather for {{ city_name.title() }}, {{ country_code }}</h2>
 <p>State: {{ state }}</p>
 
-<canvas id="chart_temperature" style="border:1px solid"></canvas>
-<canvas id="chart_wind"></canvas>
-<canvas id="chart_humidity"></canvas>
-<!-- MAPA -->
-<div id="map"></div>
+<div class="layout">
+    <div class="left">
+        <canvas id="chart_temperature" style="border:1px solid"></canvas>
+        <canvas id="chart_wind"></canvas>
+        <canvas id="chart_humidity"></canvas>
+    </div>
+
+    <div class="right">
+        <div id="map"></div>
+    </div>
+</div>
 <script>
 
 const labels = {{ weather.time|tojson }};
@@ -55,6 +75,17 @@ const wind = {{ weather.wind_speed_10m|tojson }};
 const humidity = {{ weather.relative_humidity_2m|tojson }};
 const lat = {{ lat }};
 const lon = {{ lon }};
+
+var map = L.map('map').setView([lat, lon], 8);
+
+L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    attribution: '&copy; OpenStreetMap'
+}).addTo(map);
+
+L.marker([lat, lon])
+    .addTo(map)
+    .bindPopup("{{ city_name }}")
+    .openPopup();
 
 new Chart(document.getElementById("chart_temperature"), {
     type: "bar",
@@ -96,17 +127,6 @@ new Chart(document.getElementById("chart_humidity"), {
         backgroundColor:'rgba(0, 94, 255, 0.6)'
      }
 });
-var map = L.map('map').setView([lat, lon], 8);
-
-L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-    attribution: '&copy; OpenStreetMap'
-}).addTo(map);
-
-L.marker([lat, lon])
-    .addTo(map)
-    .bindPopup("{{ city_name }}")
-    .openPopup();
-
 
 </script>
 {% else %}

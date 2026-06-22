@@ -10,6 +10,8 @@ def index():
     city_name = None
     country_code = None
     state = None
+    lat = None
+    lon = None
 
     if request.method == "POST":
 
