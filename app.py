@@ -42,7 +42,7 @@ def index():
                     "latitude": lat,
                     "longitude": lon,
                     "hourly": "temperature_2m,wind_speed_10m,relative_humidity_2m",
-                    "forecast_days": 3,
+                    "forecast_days": 2,
 
                 }
             ).json()
