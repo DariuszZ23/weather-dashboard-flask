@@ -1,11 +1,18 @@
+from typing import Any
 from flask import Flask, render_template, request
 import requests
+import time
+from flask_caching import Cache
 
 app = Flask(__name__)
 
-@app.route("/", methods=["GET", "POST"])
-def index():
+cache = Cache(config={'CACHE_TYPE': 'SimpleCache',
+                      'CACHE_DEFAULT_TIMEOUT' : 600
+                      })
+cache.init_app(app)
 
+@app.route("/", methods=["GET", "POST"])
+def get_weather():
     weather = None
     city_name = None
     country_code = None
@@ -19,14 +26,7 @@ def index():
         country = request.form.get("country")
         city_name = city
 
-        geo = requests.get(
-            "https://geocoding-api.open-meteo.com/v1/search",
-            params={
-                "name": city,
-                "count": 1,
-                "countryCode": country
-            }
-        ).json()
+        geo = get_geo_data(city, country)
 
         if geo.get("results"):
             place = geo["results"][0]
@@ -35,22 +35,8 @@ def index():
             city_name = place.get("name")
             country_code = place.get("country_code")
             state = place.get("admin1")
-            print(geo["results"][0]["admin1"])
-            data = requests.get(
-                "https://api.open-meteo.com/v1/forecast",
-                params={
-                    "latitude": lat,
-                    "longitude": lon,
-                    "hourly": "temperature_2m,wind_speed_10m,relative_humidity_2m",
-                    "forecast_days": 2,
-
-                }
-            ).json()
-
+            data = fetch_weather(lat, lon)
             weather = data["hourly"]
-            # print(data["hourly"])
-            # print(data["timezone"])
-            # print(data["hourly_units"])
 
     return render_template(
         "index.html",
@@ -62,13 +48,42 @@ def index():
         lon=lon
     )
 
-@app.route("/xx/", methods=["GET", "POST"])
-def xx():
-    return "xx"
+counter = 0
 
-# @app.route("/yy/", methods=["GET", "POST"])
-# def hello():
-    return "hello"
+@cache.memoize(timeout=3600)
+def fetch_weather(lat, lon) -> Any:
+    print("Getting data from API.")
+    print(cache.cache._cache.keys())
+    start = time.time()
+    global counter
+    counter += 1
+
+    print(f"Excecuting API request nr {counter}")
+    data = requests.get(
+        "https://api.open-meteo.com/v1/forecast",
+        params={
+            "latitude": lat,
+            "longitude": lon,
+            "hourly": "temperature_2m,wind_speed_10m,relative_humidity_2m",
+            "forecast_days": 2,
+        }
+    ).json()
+    print(f"Downloading time: {time.time() - start:.3f} s")
+    return data
+
+
+@cache.memoize(timeout=6000)
+def get_geo_data(city: str | None, country: str | None) -> Any:
+    print("Getting geo data from API.")
+    geo = requests.get(
+        "https://geocoding-api.open-meteo.com/v1/search",
+        params={
+            "name": city,
+            "count": 1,
+            "countryCode": country
+        }
+    ).json()
+    return geo
 
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=5000, debug=True)
