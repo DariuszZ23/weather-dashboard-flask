@@ -11,7 +11,7 @@ cache = Cache(config={'CACHE_TYPE': 'SimpleCache',
                       })
 cache.init_app(app)
 
-@app.route("/", methods=["GET", "POST"])
+@app.route("/weather", methods=["GET", "POST"])
 def get_weather():
     weather = None
     city_name = None
@@ -58,7 +58,7 @@ def fetch_weather(lat, lon) -> Any:
     global counter
     counter += 1
 
-    print(f"Excecuting API request nr {counter}")
+    print(f"Executing API request nr {counter}")
     data = requests.get(
         "https://api.open-meteo.com/v1/forecast",
         params={
