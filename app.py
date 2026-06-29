@@ -11,7 +11,7 @@ cache = Cache(config={'CACHE_TYPE': 'SimpleCache',
                       })
 cache.init_app(app)
 
-@app.route("/weather", methods=["GET", "POST"])
+@app.route("/weather")
 def get_weather():
     weather = None
     city_name = None
@@ -20,21 +20,23 @@ def get_weather():
     lat = None
     lon = None
 
-    if request.method == "POST":
+    city = request.args.get("city")
+    country = request.args.get("country")
 
-        city = request.form.get("city")
-        country = request.form.get("country")
+    if city and country:
         city_name = city
 
         geo = get_geo_data(city, country)
 
         if geo.get("results"):
             place = geo["results"][0]
-            lat = geo["results"][0]["latitude"]
-            lon = geo["results"][0]["longitude"]
+            lat = place["latitude"]
+            lon = place["longitude"]
+
             city_name = place.get("name")
             country_code = place.get("country_code")
             state = place.get("admin1")
+
             data = fetch_weather(lat, lon)
             weather = data["hourly"]
 
@@ -50,7 +52,7 @@ def get_weather():
 
 counter = 0
 
-@cache.memoize(timeout=3600)
+@cache.memoize(timeout=3000)
 def fetch_weather(lat, lon) -> Any:
     print("Getting data from API.")
     print(cache.cache._cache.keys())
