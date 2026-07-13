@@ -1,5 +1,5 @@
 from typing import Any
-from flask import Flask, render_template, request
+from flask import Flask, render_template, request, redirect, url_for
 import requests
 import time
 from flask_caching import Cache
@@ -10,6 +10,11 @@ cache = Cache(config={'CACHE_TYPE': 'SimpleCache',
                       'CACHE_DEFAULT_TIMEOUT' : 600
                       })
 cache.init_app(app)
+
+@app.route("/")
+def home():
+    return redirect(url_for("get_weather"))
+
 
 @app.route("/weather")
 def get_weather():
